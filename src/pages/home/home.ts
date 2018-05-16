@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { WeatherProvider } from '../../providers/weather/weather';
 
 @Component({
   selector: 'page-home',
@@ -7,8 +8,30 @@ import { NavController } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
+  weather:any;
+  location:Location;
+
+  constructor(
+    public navCtrl: NavController,
+    private weatherProvider : WeatherProvider) {
 
   }
 
+  ionViewWillEnter(){
+    this.location = {
+      city : 'Miami',
+      state : 'FL'
+    }
+
+    this.weatherProvider.getWeather(this.location.city, this.location.state)
+      .subscribe(response => {
+        console.log(response);
+      })
+  }
+
+}
+
+interface Location{
+  city:string;
+  state:string;
 }
