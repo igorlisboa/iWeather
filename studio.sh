@@ -1,0 +1,1 @@
+/work/pessoal/android-studio/bin/studio.sh
