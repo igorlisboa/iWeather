@@ -14,13 +14,10 @@ export class WeatherProvider {
   url:string;
 
   constructor(public http: HttpClient) {
-    console.log('hello world!');
     this.url = 'http://api.wunderground.com/api/'+this.apiKey+'/conditions/q';
   }
 
   getWeather(city, state){
-    console.log(this.url);
-    console.log(this.url + '/' + state + '/' + city + '.json');
     return this.http.get(this.url + '/' + state + '/' + city + '.json')
         .map(response => {
           return response

@@ -1,37 +1,44 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { WeatherProvider } from '../../providers/weather/weather';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-
   weather:any;
   location:Location;
 
   constructor(
     public navCtrl: NavController,
-    private weatherProvider : WeatherProvider) {
+    private weatherProvider : WeatherProvider,
+    private storage: Storage) {
 
   }
 
   ionViewWillEnter(){
-    this.location = {
-      city : 'Miami',
-      state : 'FL'
-    }
+    this.storage.get('location').then((val)=>{
+      if(val != null){
+        this.location = JSON.parse(val);
+      }else{
+        this.location = {
+          city : 'Miami',
+          state : 'FL'
+        }
+      }
 
-    this.weatherProvider.getWeather(this.location.city, this.location.state)
-      .subscribe(response => {
-        console.log(response);
-      })
+      this.weatherProvider.getWeather(this.location.city, this.location.state)
+        .subscribe(response => {
+          this.weather = response.current_observation;
+        })
+    });
   }
 
 }
 
-interface Location{
-  city:string;
-  state:string;
+export interface Location{
+  city?:string;
+  state?:string;
 }
